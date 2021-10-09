@@ -43,14 +43,83 @@ class SpottedImage {
     }
 }
 
+let imageDataList;
+let searchTerms = "";
+let elementsPerPage = 25;
+let currentPage = 0;
+let sortingOrder = "desc";
+
+let currentPageDropdown,
+    elementsPerPageDropdown,
+    sortingOrderDropdown,
+    searchEngineTextbox,
+    searchResultsList;
+function filterByText(inputArray, searchTerms) {
+    if(searchTerms.trim() === "") return inputArray;
+    return inputArray.filter(x => searchTerms.some(x.detectedText));
+}
+
+function updateList() {
+    // empty list
+    searchResultsList.innerHTML = "";
+
+    // clone array
+    let tempList = [...imageDataList];
+    tempList = filterByText(tempList, searchTerms);
+    tempList = tempList.sort(
+        (a, b) =>
+            (b.publishDate - a.publishDate) * (sortingOrder == "desc" ? 1 : -1));
+    for(const image of tempList.slice(currentPage * elementsPerPage, (currentPage * elementsPerPage) + elementsPerPage)) {
+        var imageData = new SpottedImage(image.fileName, image.publishDate, image.detectedText);
+        searchResultsList.append(imageData.createListEntry());
+    }
+}
+
+function updatePageSelect() {
+    if(typeof currentPageDropdown === "undefined") return;
+    currentPageDropdown.innerHTML = "";
+    currentPageDropdown.value = 0;
+
+    var x = 0;
+    for(; x < Math.ceil(imageDataList.length / elementsPerPage); x++) {
+        let pageOption = document.createElement("option");
+        pageOption.value = x;
+        pageOption.innerText = (x + 1).toString();
+        currentPageDropdown.append(pageOption);
+    }
+    if(currentPage > x) {
+        currentPage = x-1;
+        currentPageDropdown.value = x-1;
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+    currentPageDropdown = document.getElementById("page-select");
+    elementsPerPageDropdown = document.getElementById("page-elements");
+    sortingOrderDropdown = document.getElementById("page-order");
+    searchEngineTextbox = document.getElementById("sengine-textbox");
+    searchResultsList = document.querySelector(".search-results-list");
     fetch("./static_db.json").then(async (response) => {
-        let imageDataList = await response.json();
+        imageDataList = await response.json();
         imageDataList = imageDataList.sort((a, b) => b.publishDate - a.publishDate);
-        for(const image of imageDataList.slice(0, 50)) {
-            console.log(image);
-            var imageData = new SpottedImage(image.fileName, image.publishDate, image.detectedText);
-            document.querySelector(".search-results-list").append(imageData.createListEntry());
-        }
+        
+        updatePageSelect();
+        updateList();
+    });
+
+    elementsPerPageDropdown.addEventListener("change", function() {
+        elementsPerPage = parseInt(this.value);
+        updatePageSelect();
+        updateList();
+    });
+
+    currentPageDropdown.addEventListener("change", function() {
+        currentPage = parseInt(this.value);
+        updateList();
+    });
+
+    sortingOrderDropdown.addEventListener("change", function() {
+        sortingOrder = this.value;
+        updateList();
     });
 });

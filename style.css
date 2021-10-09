@@ -62,6 +62,13 @@ input[type=text]::placeholder {
     font-size: 9pt;
 }
 
+select {
+    border: 1px solid #424242;
+    background: #212121;
+    color: #EEE;
+    height: 24px;
+}
+
 .search-results-list {
     margin: 0;
     padding: 0;
