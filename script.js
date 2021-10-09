@@ -1,8 +1,8 @@
-const IMAGES_PATH = "./images/";
+const IMAGES_PATH = "images/";
 
 class SpottedImage {
     get fileURL() {
-        return IMAGES_PATH + this.fileName;
+        return IMAGES_PATH + encodeURIComponent(this.fileName);
     }
 
     constructor(fileName, publishDate, detectedText) {
@@ -24,7 +24,7 @@ class SpottedImage {
         let listEntry = document.createElement("li");
         let entryImage = document.createElement("div");
         entryImage.classList.add("spotted-image");
-        entryImage.style.backgroundImage = `url("${encodeURIComponent(this.fileURL)}")`;
+        entryImage.style.backgroundImage = `url("${this.fileURL}")`;
         
         let entryContents = document.createElement("div");
         entryContents.classList.add("spotted-contents");
