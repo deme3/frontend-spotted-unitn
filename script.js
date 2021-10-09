@@ -56,10 +56,14 @@ let currentPageDropdown,
     searchResultsList;
 function filterByText(inputArray, searchTerms) {
     if(searchTerms.trim() === "") return inputArray;
-    return inputArray.filter(x => searchTerms.some(x.detectedText));
+    console.log(searchTerms.split(" "))
+    return inputArray.filter
+    (post => post.detectedText.split(" ")
+                                .some(word =>
+                                     searchTerms.split(" ").some(searchWord => word.includes(searchWord))));
 }
 
-function updateList() {
+function updateList(updatePageSelectToo = false) {
     // empty list
     searchResultsList.innerHTML = "";
 
@@ -69,19 +73,21 @@ function updateList() {
     tempList = tempList.sort(
         (a, b) =>
             (b.publishDate - a.publishDate) * (sortingOrder == "desc" ? 1 : -1));
+
+    if(updatePageSelectToo) updatePageSelect(tempList);
     for(const image of tempList.slice(currentPage * elementsPerPage, (currentPage * elementsPerPage) + elementsPerPage)) {
         var imageData = new SpottedImage(image.fileName, image.publishDate, image.detectedText);
         searchResultsList.append(imageData.createListEntry());
     }
 }
 
-function updatePageSelect() {
+function updatePageSelect(inputArray) {
     if(typeof currentPageDropdown === "undefined") return;
     currentPageDropdown.innerHTML = "";
     currentPageDropdown.value = 0;
 
     var x = 0;
-    for(; x < Math.ceil(imageDataList.length / elementsPerPage); x++) {
+    for(; x < Math.ceil(inputArray.length / elementsPerPage); x++) {
         let pageOption = document.createElement("option");
         pageOption.value = x;
         pageOption.innerText = (x + 1).toString();
@@ -93,6 +99,7 @@ function updatePageSelect() {
     }
 }
 
+let textFilterTimeoutHandle = null;
 document.addEventListener("DOMContentLoaded", () => {
     currentPageDropdown = document.getElementById("page-select");
     elementsPerPageDropdown = document.getElementById("page-elements");
@@ -103,14 +110,12 @@ document.addEventListener("DOMContentLoaded", () => {
         imageDataList = await response.json();
         imageDataList = imageDataList.sort((a, b) => b.publishDate - a.publishDate);
         
-        updatePageSelect();
-        updateList();
+        updateList(true);
     });
 
     elementsPerPageDropdown.addEventListener("change", function() {
         elementsPerPage = parseInt(this.value);
-        updatePageSelect();
-        updateList();
+        updateList(true);
     });
 
     currentPageDropdown.addEventListener("change", function() {
@@ -121,5 +126,13 @@ document.addEventListener("DOMContentLoaded", () => {
     sortingOrderDropdown.addEventListener("change", function() {
         sortingOrder = this.value;
         updateList();
+    });
+
+    searchEngineTextbox.addEventListener("keyup", function() {
+        if(textFilterTimeoutHandle != null) clearTimeout(textFilterTimeoutHandle);
+        searchTerms = this.value;
+        textFilterTimeoutHandle = setTimeout(() => {
+            updateList(true);
+        }, 500);
     });
 });
