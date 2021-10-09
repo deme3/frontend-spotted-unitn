@@ -1,0 +1,109 @@
+body, html {
+    background: #212121;
+    color: #EEE;
+    margin: 0;
+    padding: 0;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+a {
+    text-decoration: none;
+    border-bottom: 2px dotted #424242;
+    color: #FFF;
+}
+
+a:hover {
+    border-bottom: 2px dotted #FFF;
+}
+
+header {
+    margin: 0 12.5%;
+    padding: 16px 0;
+}
+
+header h1 {
+    margin-bottom: 0;
+    color: rgb(243, 181, 98);
+}
+
+#search-engine h1 {
+    margin-bottom: 4px;
+}
+
+header h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+    color: #eeeeeebb;
+}
+
+header h3 {
+    margin-top: 0;
+    color: #eeeeee77;
+}
+
+#app-body {
+    margin: 0 auto;
+    width: 75%;
+}
+
+input[type=text] {
+    background: #212121;
+    border: 1px solid #424242;
+    padding: 8px 16px;
+    outline: none;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 14pt;
+    color: #EEE;
+}
+
+input[type=text]::placeholder {
+    font-size: 9pt;
+}
+
+.search-results-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.search-results-list li {
+    margin: 8px 0;
+    border-radius: 8px;
+    background: #303030;
+    border: 1px solid #424242;
+    overflow: hidden;
+    display: flex;
+}
+
+.search-results-list li .spotted-image {
+    width: 250px;
+    height: 250px;
+    float: left;
+    margin-right: 8px;
+    border: 1px solid black;
+    background-size: contain;
+}
+
+.search-results-list li .spotted-contents {
+    width: calc(100% - 274px);
+    padding: 16px 16px 8px 8px;
+    max-height: 226px;
+    overflow: auto;
+}
+
+.search-results-list li .spotted-text {
+    text-align: justify;
+    font-size: 14pt;
+}
+
+.search-results-list li .spotted-date {
+    font-size: 16pt;
+    margin-bottom: 8px;
+    color: #808080;
+}
+
+.clear {
+    clear: both;
+}
