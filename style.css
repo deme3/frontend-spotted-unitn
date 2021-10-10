@@ -100,6 +100,23 @@ select {
     overflow: auto;
 }
 
+.search-results-list li .spotted-instagram-link {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1px solid #424242;
+    background: #212121;
+    border-radius: 8px;
+    margin: 8px 0;
+    font-size: 9pt;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.search-results-list li .spotted-instagram-link.unavailable {
+    cursor: default;
+    opacity: 0.5;
+}
+
 .search-results-list li .spotted-text {
     text-align: justify;
     font-size: 14pt;

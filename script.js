@@ -5,10 +5,11 @@ class SpottedImage {
         return IMAGES_PATH + encodeURIComponent(this.fileName);
     }
 
-    constructor(fileName, publishDate, detectedText) {
+    constructor(fileName, publishDate, detectedText, instagramLink) {
         this.fileName = fileName;
         this.publishDate = new Date(publishDate);
         this.detectedText = detectedText.replace(/\n/g, " ");
+        this.instagramLink = instagramLink;
     }
 
     /*
@@ -33,11 +34,23 @@ class SpottedImage {
         entryContentsDate.classList.add("spotted-date");
         entryContentsDate.innerText = this.publishDate.toLocaleDateString() + " " + this.publishDate.toLocaleTimeString();
 
+        let entryContentsLink = document.createElement("a");
+        entryContentsLink.classList.add("spotted-instagram-link");
+
+        if(this.instagramLink !== null) {
+            entryContentsLink.innerText = "Apri su Instagram";
+            entryContentsLink.href = this.instagramLink;
+            entryContentsLink.target = "_blank";
+        } else {
+            entryContentsLink.innerText = "Link non disponibile";
+            entryContentsLink.classList.add("unavailable");
+        }
+
         let entryContentsText = document.createElement("div");
         entryContentsText.classList.add("spotted-text");
         entryContentsText.innerText = this.detectedText;
         
-        entryContents.append(entryContentsDate, entryContentsText);
+        entryContents.append(entryContentsDate, entryContentsText, entryContentsLink);
         listEntry.append(entryImage, entryContents);
         return listEntry;
     }
@@ -76,7 +89,7 @@ function updateList(updatePageSelectToo = false) {
 
     if(updatePageSelectToo) updatePageSelect(tempList);
     for(const image of tempList.slice(currentPage * elementsPerPage, (currentPage * elementsPerPage) + elementsPerPage)) {
-        var imageData = new SpottedImage(image.fileName, image.publishDate, image.detectedText);
+        var imageData = new SpottedImage(image.fileName, image.publishDate, image.detectedText, image.instagramLink);
         searchResultsList.append(imageData.createListEntry());
     }
 }
