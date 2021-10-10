@@ -92,6 +92,7 @@ function updateList(updatePageSelectToo = false) {
         var imageData = new SpottedImage(image.fileName, image.publishDate, image.detectedText, image.instagramLink);
         searchResultsList.append(imageData.createListEntry());
     }
+    searchEngineTextbox.parentElement.setAttribute("data-found-entries", tempList.length);
 }
 
 function updatePageSelect(inputArray) {

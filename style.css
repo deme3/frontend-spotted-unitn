@@ -69,6 +69,20 @@ select {
     height: 24px;
 }
 
+#sengine-textbox-container {
+    position: relative;
+}
+
+#sengine-textbox-container::after {
+    content: attr(data-found-entries)" risultati";
+    display: block;
+    position: absolute;
+    right: 16px;
+    top: 14px;
+    text-align: right;
+    font-size: 9pt;
+}
+
 .search-results-list {
     margin: 0;
     padding: 0;
